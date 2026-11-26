@@ -8,12 +8,42 @@ The full plan (modules, desk tests, integration steps, sensor fusion) is in `doc
 - The C: drive is nearly full. Install and download everything to D:, never to C:.
 - PlatformIO Core lives in `D:\Tools\platformio` (`PLATFORMIO_CORE_DIR`). The `pio` command is `D:\Tools\platformio\penv\Scripts\pio.exe`. It is not on PATH, so call it by full path or from the PlatformIO terminal.
 - VS Code is portable in `D:\Tools\VSCode`.
-- The PC test compiler is MSYS2 gcc (UCRT64, g++ 16.2) in `D:\Tools\msys64`, installed from the self-extracting archive, so nothing is on C:. `D:\Tools\msys64\ucrt64\bin` is on the user PATH. Update it with `D:\Tools\msys64\usr\bin\bash.exe -lc "pacman -Syu"` (set `MSYSTEM=UCRT64`). The user PATH from before the install is saved in `D:\Tools\setup\user-PATH-backup-before-msys2.txt`.
+- The PC test compiler (MSYS2 gcc in `D:\Tools\msys64`, PATH entry `D:\Tools\msys64\ucrt64\bin`) is not installed yet. Until it is, `pio test -e test` will fail.
+
+## PRIORITY: real hardware first
+IMPORTANT: Munad wants code that runs on the MegaPi with real sensors and motors connected, tested physically on the desk while the robot is being built. Simulation (`hal_sim.cpp`, a `sim` env) comes later, only if time allows. Do not start simulation work unless he asks.
+
+Each part gets a **desk-test program**:
+- Create a PlatformIO env `hw_<part>` that `extends = env:megapi` and uses `build_src_filter` to build `src/hwtest/<part>.cpp` plus the shared code. Do not build `src/main.cpp` in these envs.
+- The program prints readings to Serial and, once Bluetooth works, to Bluetooth too.
+- It accepts simple single-letter serial commands, for example motor speed, open/close or start/stop, so Munad can test by hand.
+- Upload with `pio run -e hw_<part> -t upload`.
+- Port and slot numbers go in `config.h`. Ask Munad where each part is plugged in. Never guess.
+
+Desk-test order:
+1. Serial and Bluetooth
+2. Ultrasonic
+3. Line follower
+4. Colour sensor (calibrate on real cubes)
+5. Gyro and accelerometer
+6. Drive motors and encoders (measure cm per pulse)
+7. Arm motor (homing, position)
+8. Gripper
+
+Then combine the parts in this order:
+1. Line following.
+2. Detecting cubes while driving.
+3. Picking a cube.
+4. Spinning 180°.
+5. Placing the cube.
+6. The full auto-test scenario.
+
+PC unit tests stay for the pure maths only (geometry, filters, strategy). They never block hardware work.
 
 ## Build and test
 - Robot build: `pio run -e megapi`. Upload: `pio run -e megapi -t upload`. Serial monitor: `pio device monitor -b 115200`.
-- PC unit tests: `pio test -e test` (Unity, native).
-- A `sim` environment (PC simulation of the whole robot through `hal_sim.cpp`) is planned.
+- PC unit tests: `pio test -e test` (Unity, native). Add `-v` to see the design report.
+- GitHub Actions (`.github/workflows/check.yml`) runs `pio test -e test -v` and `pio run -e megapi` on every push and pull request.
 - Any change to logic in `src/core/` gets a test in `test/`.
 
 ## Hardware
@@ -29,11 +59,24 @@ The full plan (modules, desk tests, integration steps, sensor fusion) is in `doc
   - MPU-6050 accelerometer/gyro at 0x68, DLPF_CFG = 3 (44 Hz).
   - Camera shutter.
 - Communications: Bluetooth module on `Serial3`.
-- The robot size is not final. Every dimension is a TBD value in `include/config.h`.
+- The robot size is not final. Every mechanical dimension (body, wheels, arm, sensor positions) is a TBD value in `include/robot_design.h`. The mechanical teammate owns that file; `config.h` includes it, so the values are still `cfg::`. `test/test_robot_design` checks them against the limits below, and `docs/mechanical_interface.md` explains them to the teammate. The arm numbers refer to the grip point (the middle of the jaws).
   - Limits: width ≤ 16 cm and turn radius ≤ 12.5 cm, which gives ≤ 9.6 cm from the axle at 16 cm width.
+  - These limits include the retracted arm and anything sticking out.
+  - Arm reach from the robot's side: the deposit cube centre is 20 cm from the colony line, so reach ≥ 20 − W/2; the zone centre is 17.5 cm from the line.
+
+## Rules that affect the code (CDC v1.1)
+Auto-test scenario:
+- Fetch the water cube (blue) and place it in Habitat in under 2 minutes.
+
+During a match:
+- Stay at most 20 s inside a deposit.
+- Stop in under 3 s on an emergency-stop command, and wait for an explicit resume.
+- Touching the outer boundary line counts as leaving the field, and the robot must then trigger its own emergency stop.
+- Never enter the opponent's colony or a deposit occupied by the other robot.
+- Report the detected resource, the picked resource, the target zone and the robot state to the governor (Bluetooth).
 
 ## Architecture rules
-1. **All tunable numbers go in `include/config.h`** (namespace `cfg`). No magic numbers in modules.
+1. **All tunable numbers go in `include/config.h`** (namespace `cfg`). Mechanical dimensions go in `include/robot_design.h`, which `config.h` includes. No magic numbers in modules.
 2. **The HAL is the only code that touches hardware.**
    - `hal.h` declares the hardware functions.
    - `hal_megapi.cpp` implements them on the robot, and `hal_sim.cpp` implements them on the PC (link-time substitution).
@@ -64,11 +107,10 @@ Heading uses the gyro, pulled gently back towards the line (β ≈ 0.01), and re
 Write equations in docs as LaTeX display blocks.
 
 ## Test levels and integration
-- **L0**: unit tests on the PC.
-- **L1**: simulation.
-- **L2**: desk tests with real parts but no robot.
-- **L3**: on the robot.
-- Integration goes in the order I0–I9 from the plan.
+- **L2 desk tests on real hardware come first** (see PRIORITY above), then **L3** on the assembled robot.
+- **L0** PC unit tests only for the pure maths.
+- **L1** simulation is deferred.
+- Integration still follows the order I0–I9 from the plan, but skip the simulation parts for now.
 
 ## Deadlines
 | Milestone | Date |

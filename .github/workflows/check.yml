@@ -1,0 +1,28 @@
+# Runs on GitHub after every push and pull request.
+# Green tick = the robot design meets every limit, all PC tests pass and the firmware builds.
+# Red cross  = open the run, then the failed step; the message says which rule broke and why.
+name: Design and code check
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:   # adds a "Run workflow" button in the Actions tab
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Robot design check and PC unit tests
+        run: pio test -e test -v
+
+      - name: Robot firmware build (MegaPi)
+        run: pio run -e megapi

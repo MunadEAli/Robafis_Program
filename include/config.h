@@ -4,24 +4,25 @@
 
 #include <stdint.h>
 
+// The robot's mechanical dimensions (size, wheels, arm, sensor positions) live in their own
+// file, owned by the mechanical designer. They are part of cfg like everything else.
+#include "robot_design.h"
+
 namespace cfg {
 
 // ---------- Serial / Bluetooth ----------
 constexpr uint32_t SERIAL_BAUD = 115200;   // USB serial monitor
 constexpr uint32_t BT_BAUD     = 115200;   // Bluetooth module on Serial3 (TBD: check module)
 
-// ---------- Robot envelope (TBD: teammate's CAD) ----------
-constexpr float ROBOT_WIDTH_CM = 16.0f;    // outer width, wheel to wheel
-constexpr float ROBOT_FRONT_CM = 9.0f;     // wheel axle -> front-most point
-constexpr float ROBOT_REAR_CM  = 9.0f;     // wheel axle -> rear-most point
-
-// Limits coming from the track layout (see plan, "Geometry")
-constexpr float MAX_WIDTH_CM       = 16.0f;  // must fit between colony line and deposits
-constexpr float MAX_TURN_RADIUS_CM = 12.5f;  // 180-degree spin on the spot must clear everything
+// ---------- Limits the mechanical design must meet (plan, "Envelope for the mechanical design") ----------
+// Checked automatically against robot_design.h by test/test_robot_design.
+constexpr float MAX_WIDTH_CM                = 16.0f;  // line corridor ~20 cm; both sides face deposits on some trips
+constexpr float MAX_TURN_RADIUS_CM          = 12.5f;  // = sqrt(g^2 + (gap/2)^2): 180-degree turn between two deposits
+constexpr float MIN_US_AHEAD_OF_ARM_CM      = 6.0f;   // cube echo ends before the arm passes it: no reversing
+constexpr float LINE_SENSOR_MAX_OFFSET_Y_CM = 0.5f;   // "on the centreline"
+constexpr float CUBE_SIZE_CM                = 3.0f;   // resource cube edge
 
 // ---------- Drive (TBD: measure on the robot) ----------
-constexpr float WHEEL_DIAMETER_CM  = 6.4f;
-constexpr float WHEEL_BASE_CM      = 13.0f;   // distance between the two wheel centres
 constexpr float ENC_PULSES_PER_REV = 8.0f;    // encoder pulses per motor-shaft turn
 constexpr float DRIVE_GEAR_RATIO   = 46.67f;  // 185 rpm motors (check motor label)
 constexpr float ARM_GEAR_RATIO     = 75.0f;   // 86 rpm motor (check motor label)

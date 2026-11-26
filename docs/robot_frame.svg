@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" width="820" height="520" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#24292f">
+  <!-- Top view, robot frame. Scale 1 cm = 12 px. Axle centre at (340, 310). +x right, +y up. -->
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#24292f"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="820" height="520" fill="#ffffff"/>
+
+  <text x="20" y="22" font-size="15" font-weight="600">Top view, robot frame (to scale with the current numbers)</text>
+  <text x="800" y="22" text-anchor="end" fill="#57606a">deposits are on this side (+y) when scanning</text>
+  <line x1="640" y1="94" x2="790" y2="94" stroke="#24292f" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="632" y="98" text-anchor="end" fill="#57606a">direction of travel when scanning (+x)</text>
+  <text x="20" y="512" fill="#57606a">your colony is on this side (-y) when scanning</text>
+
+  <!-- Turning circle limit, R = 12.5 cm -->
+  <circle cx="340" cy="310" r="150" fill="none" stroke="#cf222e" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="500" y="440" fill="#cf222e">turning radius limit 12.5 cm</text>
+  <text x="500" y="456" fill="#cf222e">(axle centre to the farthest corner)</text>
+
+  <!-- Body: width 16, front 9, rear 9 -->
+  <rect x="232" y="214" width="216" height="192" fill="#eef2f7" stroke="#24292f" stroke-width="2"/>
+
+  <!-- Wheels: base 13, diameter 6.4 -->
+  <rect x="302" y="218" width="77" height="28" rx="4" fill="#57606a"/>
+  <rect x="302" y="374" width="77" height="28" rx="4" fill="#57606a"/>
+  <line x1="340" y1="246" x2="340" y2="374" stroke="#57606a" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <line x1="286" y1="232" x2="286" y2="388" stroke="#24292f" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <line x1="252" y1="232" x2="302" y2="232" stroke="#8c959f" stroke-width="0.8"/>
+  <line x1="252" y1="388" x2="302" y2="388" stroke="#8c959f" stroke-width="0.8"/>
+  <line x1="184" y1="386" x2="284" y2="370" stroke="#57606a" stroke-width="0.8"/>
+  <text x="180" y="384" text-anchor="end" fill="#57606a">WHEEL_BASE_CM:</text>
+  <text x="180" y="400" text-anchor="end" fill="#57606a">wheel centre to centre</text>
+
+  <!-- IMU at the origin -->
+  <rect x="330" y="300" width="20" height="20" fill="#f3eefe" stroke="#8250df" stroke-width="1.5"/>
+  <circle cx="340" cy="310" r="3.5" fill="#24292f"/>
+  <line x1="184" y1="254" x2="331" y2="305" stroke="#57606a" stroke-width="0.8"/>
+  <text x="180" y="246" text-anchor="end">origin = middle of the axle</text>
+  <text x="180" y="262" text-anchor="end" fill="#8250df">IMU: IMU_X_CM, IMU_Y_CM</text>
+
+  <!-- Axes -->
+  <line x1="340" y1="310" x2="392" y2="310" stroke="#24292f" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="364" y="328">+x</text>
+  <line x1="340" y1="310" x2="340" y2="280" stroke="#24292f" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="326" y="292" text-anchor="end">+y</text>
+
+  <!-- Line sensor: x 6, y 0 -->
+  <rect x="406" y="296" width="12" height="28" fill="#dafbe1" stroke="#1a7f37" stroke-width="1.5"/>
+  <line x1="418" y1="318" x2="500" y2="340" stroke="#1a7f37"/>
+  <text x="504" y="338" fill="#1a7f37">line sensor, underneath (LINE_SENSOR_X_CM;</text>
+  <text x="504" y="354" fill="#1a7f37">on the centreline: LINE_SENSOR_Y_CM = 0)</text>
+
+  <!-- Ultrasonic: x 7, y 8 (face on the left side) -->
+  <rect x="406" y="214" width="36" height="12" fill="#fff1e5" stroke="#bc4c00" stroke-width="1.5"/>
+  <line x1="424" y1="226" x2="424" y2="272" stroke="#bc4c00" stroke-dasharray="3 3"/>
+  <line x1="442" y1="220" x2="500" y2="214" stroke="#bc4c00"/>
+  <text x="504" y="212" fill="#bc4c00">ultrasonic, facing left</text>
+  <text x="504" y="228" fill="#bc4c00">(ULTRASONIC_X_CM to its axis,</text>
+  <text x="504" y="244" fill="#bc4c00">ULTRASONIC_Y_CM to its front face)</text>
+
+  <!-- Ultrasonic >= 6 cm ahead of the arm axis -->
+  <line x1="340" y1="266" x2="424" y2="266" stroke="#24292f" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="382" y="260" text-anchor="middle" font-size="12">&#8805; 6 cm</text>
+
+  <!-- Arm: x 0, grip point 6.5 from the centreline when retracted (y 232), stroke 15 -> 21.5 (y 52) -->
+  <rect x="334" y="58" width="12" height="174" fill="#ddf4ff" stroke="#0969da" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <rect x="324" y="44" width="32" height="16" fill="none" stroke="#0969da" stroke-width="2"/>
+  <circle cx="340" cy="52" r="3.5" fill="#0969da"/>
+  <circle cx="340" cy="232" r="4" fill="#ffffff" stroke="#0969da" stroke-width="2"/>
+  <text x="364" y="50" fill="#0969da">gripper + colour sensor (arm fully extended);</text>
+  <text x="364" y="66" fill="#0969da">dot = grip point, the middle of the jaws</text>
+  <text x="352" y="120" fill="#0969da">arm axis: ARM_X_CM from the axle</text>
+  <text x="352" y="136" fill="#0969da">(0 here = level with the axle)</text>
+  <line x1="344" y1="228" x2="400" y2="192" stroke="#0969da"/>
+  <text x="404" y="190" fill="#0969da">grip point retracted: ARM_GRIP_RETRACTED_Y_CM</text>
+
+  <!-- Reach dimension -->
+  <line x1="300" y1="52" x2="300" y2="214" stroke="#24292f" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="292" y="104" text-anchor="end">grip point reach beyond the side:</text>
+  <text x="292" y="120" text-anchor="end">&#8805; 12 cm (cube in a deposit)</text>
+  <text x="292" y="136" text-anchor="end" fill="#57606a">= retracted grip point + ARM_STROKE_CM</text>
+  <text x="292" y="152" text-anchor="end" fill="#57606a">minus half the width</text>
+
+  <!-- Width dimension -->
+  <line x1="220" y1="214" x2="220" y2="406" stroke="#24292f" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="180" y="306" text-anchor="end">ROBOT_WIDTH_CM</text>
+  <text x="180" y="322" text-anchor="end">&#8804; 16 cm, all included</text>
+
+  <!-- Front / rear dimensions -->
+  <line x1="232" y1="406" x2="232" y2="486" stroke="#8c959f" stroke-width="0.8"/>
+  <line x1="340" y1="406" x2="340" y2="486" stroke="#8c959f" stroke-width="0.8"/>
+  <line x1="448" y1="406" x2="448" y2="486" stroke="#8c959f" stroke-width="0.8"/>
+  <line x1="232" y1="478" x2="340" y2="478" stroke="#24292f" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <line x1="340" y1="478" x2="448" y2="478" stroke="#24292f" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="286" y="496" text-anchor="middle" font-size="12">ROBOT_REAR_CM</text>
+  <text x="394" y="496" text-anchor="middle" font-size="12">ROBOT_FRONT_CM</text>
+</svg>
