@@ -63,7 +63,7 @@ PC unit tests stay for the pure maths only (geometry, filters, strategy). They n
   - Do not use Makeblock's `distanceCm(60)`. In library 3.31 it ignores the 60 and waits for the whole echo pulse (tens of ms with nothing in range), and it returns the previous value if called again within 23 ms. Read the pin directly with `pulseIn(pin, HIGH, cfg::US_TIMEOUT_US)` (3.7 ms cap), as `src/hwtest/ultrasonic.cpp` does.
   - Desk test 4 (`tests/results/2026-11-27_ultrasonic.csv`): a 3 cm cube looks 7–9 cm wide at 8–14 cm, and a 16 cm flat object looks ~23 cm wide at 10 cm. Readings at an object's edges come out up to ~5 cm too long, and single stray far echoes (an arm, the room) happen. Thresholds are in `cfg::SCAN_*`.
   - Sensor ports 5–8 are on the "MegaPi Shield for RJ25", stacked on the MegaPi's left grey/red/yellow (GND/5V/SIG) pin rows. Port-to-pin table: `cfg::MEGAPI_PORT_PIN1/2`.
-  - Colour sensor on the arm.
+  - Colour sensor on the arm: Makeblock Me Color Sensor V1.0 = ROHM BH1745 (R, G, B, clear), I2C 0x38, on port 8 of the shield. Port pin 1 (67) HIGH = white LEDs on; pin 2 (66) LOW = sensor powered. Needs a port with a white (I2C) patch: 6, 7 or 8. Desk test: `hw_color`. (Munad chose to do the colour sensor before the line follower.)
   - MPU-6050 accelerometer/gyro at 0x68, DLPF_CFG = 3 (44 Hz).
   - Camera shutter.
 - Communications: Makeblock dual-mode Bluetooth module in the MegaPi's onboard wireless socket, on `Serial3` at 115200 (confirmed in desk test 1, `hw_link`).

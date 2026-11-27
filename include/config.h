@@ -50,6 +50,17 @@ constexpr float SCAN_ROBOT_MIN_WIDTH_CM = 16.0f;  // from this: ROBOT; in betwee
 constexpr float SCAN_MIN_VALID_CM       = 3.0f;   // plan: shorter readings are not trusted
 // Edge readings come out up to ~5 cm too long, so an object's distance is its closest readings, not the mean.
 
+// ---------- Colour sensor (Makeblock Me Color Sensor V1.0 = ROHM BH1745, I2C) ----------
+// Needs a port with a white (I2C) patch: 6, 7 or 8. The port's two plain pins switch the board
+// (Makeblock MeColorSensor.cpp): S1 = pin 1, HIGH = white LEDs on; S2 = pin 2, LOW = sensor powered.
+constexpr uint8_t  COLOR_PORT       = 8;      // plugged in by Munad, 27 Nov 2026
+constexpr uint8_t  COLOR_LED_PIN    = MEGAPI_PORT_PIN1[COLOR_PORT];   // 67 (A13)
+constexpr uint8_t  COLOR_POWER_PIN  = MEGAPI_PORT_PIN2[COLOR_PORT];   // 66 (A12), LOW = on
+constexpr uint8_t  COLOR_I2C_ADDR   = 0x38;
+constexpr uint16_t COLOR_PERIOD_MS  = 200;    // the chip measures every 160 ms; read a little slower
+constexpr uint8_t  COLOR_SAMPLES    = 20;     // plan: each cube and card read 20 times
+constexpr uint32_t I2C_TIMEOUT_US   = 3000;   // a stuck I2C bus gives up instead of hanging the loop
+
 // ---------- Link supervision ----------
 constexpr uint16_t HEARTBEAT_PERIOD_MS = 500;   // plan: HB twice a second
 constexpr uint16_t STOP_LATENCY_MAX_MS = 500;   // desk test 1: phone STOP must show up within this
