@@ -1,0 +1,68 @@
+# Desk test 4 (plan step 4): side ultrasonic, apparent width. 27 Nov 2026, Munad.
+# Sensor: Me Ultrasonic on port 6 (pin 63), read with pulseIn and a 3.7 ms cap (hw_ultrasonic 0.1.0).
+# Rig: sensor standing on the desk, eyes ~1.5-2 cm high, facing a paper track drawn 0-22 cm.
+#   Track mark 11 is straight in front of the point midway between the eyes.
+#   Cube (3 cm) slid along the track 1 cm at a time, near face on the line, distance d from the eyes.
+# Columns: pass, object, d_cm, x_cm (track mark of the object's centre), then the median, min and max of
+#   5 readings (cm, 0 = no echo within 60 cm) and how many of the 5 had an echo.
+# Summary: cube seen over x 7-15 at 8 cm (~9 cm apparent), 8-14 at 10 cm (~7 cm), 7-14 at 12 cm (~8 cm).
+#   Edge readings read long (up to +3.8 cm). One stray far echo (48 cm, 1 of 5) at 12 cm, x 15.
+pass,object,d_cm,x_cm,median_cm,min_cm,max_cm,valid
+1,cube,8,0,0.0,0.0,0.0,0
+1,cube,8,1,0.0,0.0,0.0,0
+1,cube,8,2,0.0,0.0,0.0,0
+1,cube,8,3,0.0,0.0,0.0,0
+1,cube,8,4,0.0,0.0,0.0,0
+1,cube,8,5,0.0,0.0,0.0,0
+1,cube,8,6,0.0,0.0,0.0,0
+1,cube,8,7,11.8,11.8,12.7,5
+1,cube,8,8,11.7,11.6,12.0,5
+1,cube,8,9,8.6,8.6,8.6,5
+1,cube,8,10,8.1,8.1,8.1,5
+1,cube,8,11,8.1,8.1,8.1,5
+1,cube,8,12,8.9,8.9,8.9,5
+1,cube,8,13,9.0,9.0,9.0,5
+1,cube,8,14,7.3,7.3,7.3,1
+1,cube,8,15,13.2,12.7,13.2,5
+1,cube,8,16,0.0,0.0,0.0,0
+1,cube,8,17,0.0,0.0,0.0,0
+1,cube,8,18,0.0,0.0,0.0,0
+1,cube,8,19,0.0,0.0,0.0,0
+1,cube,8,20,0.0,0.0,0.0,0
+1,cube,8,21,0.0,0.0,0.0,0
+1,cube,8,22,0.0,0.0,0.0,0
+2,cube,10,0,0.0,0.0,0.0,0
+2,cube,10,1,0.0,0.0,0.0,0
+2,cube,10,2,0.0,0.0,0.0,0
+2,cube,10,3,0.0,0.0,0.0,0
+2,cube,10,4,0.0,0.0,0.0,0
+2,cube,10,5,0.0,0.0,0.0,0
+2,cube,10,6,0.0,0.0,0.0,0
+2,cube,10,7,0.0,0.0,0.0,0
+2,cube,10,8,11.8,11.5,11.8,5
+2,cube,10,9,12.1,12.1,12.1,5
+2,cube,10,10,10.4,10.4,10.4,5
+2,cube,10,11,10.0,10.0,10.0,5
+2,cube,10,12,11.3,11.3,11.3,5
+2,cube,10,13,12.5,12.5,12.5,5
+2,cube,10,14,11.9,11.9,11.9,5
+2,cube,10,15,0.0,0.0,0.0,0
+2,cube,10,16,0.0,0.0,0.0,0
+2,cube,10,17,0.0,0.0,0.0,0
+3,cube,12,0,0.0,0.0,0.0,0
+3,cube,12,1,0.0,0.0,0.0,0
+3,cube,12,2,0.0,0.0,0.0,0
+3,cube,12,3,0.0,0.0,0.0,0
+3,cube,12,4,0.0,0.0,0.0,0
+3,cube,12,5,0.0,0.0,0.0,0
+3,cube,12,6,0.0,0.0,0.0,0
+3,cube,12,7,15.8,15.8,15.8,5
+3,cube,12,8,13.9,13.9,13.9,5
+3,cube,12,9,13.9,13.9,13.9,5
+3,cube,12,10,12.9,12.9,12.9,5
+3,cube,12,11,12.4,12.4,12.4,5
+3,cube,12,12,12.9,12.9,12.9,5
+3,cube,12,13,15.1,15.1,15.1,5
+3,cube,12,14,13.9,13.9,14.3,5
+3,cube,12,15,48.0,48.0,48.0,1
+3,cube,12,16,0.0,0.0,0.0,0
