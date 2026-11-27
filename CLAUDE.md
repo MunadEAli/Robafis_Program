@@ -43,7 +43,7 @@ PC unit tests stay for the pure maths only (geometry, filters, strategy). They n
 ## Git branches
 - Day-to-day work happens on `dev`. Commit and push there, including steps that are still in progress.
 - `main` only gets finished steps: merge `dev` into `main` when a step's "done when" is met, with the measured numbers in the commit message.
-- Raw monitor logs (`platformio-device-monitor-*.log`) are not committed. Keep the useful ones as `tests/results/<date>_<part>.csv`.
+- Raw monitor logs (`logs/device-monitor-*.log`, written by the monitor's log2file filter) are not committed. Keep the useful ones as `tests/results/<date>_<part>.csv`.
 
 ## Build and test
 - Robot build: `pio run -e megapi`. Upload: `pio run -e megapi -t upload`. Serial monitor: `pio device monitor -b 115200`.
