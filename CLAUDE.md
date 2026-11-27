@@ -58,7 +58,11 @@ PC unit tests stay for the pure maths only (geometry, filters, strategy). They n
   - Colour sensor on the arm.
   - MPU-6050 accelerometer/gyro at 0x68, DLPF_CFG = 3 (44 Hz).
   - Camera shutter.
-- Communications: Bluetooth module on `Serial3`.
+- Communications: Makeblock dual-mode Bluetooth module in the MegaPi's onboard wireless socket, on `Serial3` at 115200 (confirmed in desk test 1, `hw_link`).
+  - While no phone or laptop is connected, the module answers everything the MegaPi sends with `+ERROR01`, so code must never echo unknown Bluetooth bytes back to Bluetooth.
+  - Phones and laptops connect over BLE, not classic Bluetooth: the device is `Makeblock_LE…`, with a custom profile of service `0000ffe1-…`, read (notify) `0000ffe2-…` and write `0000ffe3-…` (all `-0000-1000-8000-00805f9b34fb`). On Android, use Serial Bluetooth Terminal and long-press the device to set the custom profile.
+  - MegaPi USB is COM8 on Munad's PC (CH340). COM3 is the PC's Intel port, never the board.
+  - Still to do for step 3: measure the STOP round-trip time from the phone (plan: under 0.5 s).
 - The robot size is not final. Every mechanical dimension (body, wheels, arm, sensor positions) is a TBD value in `include/robot_design.h`. The mechanical teammate owns that file; `config.h` includes it, so the values are still `cfg::`. `test/test_robot_design` checks them against the limits below, and `docs/mechanical_interface.md` explains them to the teammate. The arm numbers refer to the grip point (the middle of the jaws).
   - Limits: width ≤ 16 cm and turn radius ≤ 12.5 cm, which gives ≤ 9.6 cm from the axle at 16 cm width.
   - These limits include the retracted arm and anything sticking out.

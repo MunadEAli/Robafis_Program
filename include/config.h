@@ -10,9 +10,25 @@
 
 namespace cfg {
 
+// ---------- Firmware identity ----------
+// A macro, not a constexpr array, so the robot can print it with F(...) and keep it in flash
+// instead of SRAM.
+#define CFG_FW_VERSION "0.1.0"
+
 // ---------- Serial / Bluetooth ----------
 constexpr uint32_t SERIAL_BAUD = 115200;   // USB serial monitor
-constexpr uint32_t BT_BAUD     = 115200;   // Bluetooth module on Serial3 (TBD: check module)
+// Bluetooth: Makeblock dual-mode module in the MegaPi's onboard wireless socket, Android phone.
+// Desk test 1 (hw_link, 26 Nov 2026): the module's bytes arrive on Serial3 as clean text at 115200.
+// While no phone is connected the module answers what it receives with "ERROR01" (it reads it as
+// setup commands), so the code must never echo unknown Bluetooth bytes back to Bluetooth.
+constexpr uint8_t  BT_SERIAL_PORT = 3;      // Serial3 = pins 14/15 (confirmed)
+constexpr uint32_t BT_BAUD        = 115200; // confirmed
+
+// ---------- Link supervision ----------
+constexpr uint16_t HEARTBEAT_PERIOD_MS = 500;   // plan: HB twice a second
+constexpr uint16_t STOP_LATENCY_MAX_MS = 500;   // desk test 1: phone STOP must show up within this
+constexpr uint16_t CMD_GAP_MS          = 30;    // a letter is a command only at a line start or after
+                                                // this much silence (typing); module chatter is faster
 
 // ---------- Limits the mechanical design must meet (plan, "Envelope for the mechanical design") ----------
 // Checked automatically against robot_design.h by test/test_robot_design.
