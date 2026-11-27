@@ -24,6 +24,24 @@ constexpr uint32_t SERIAL_BAUD = 115200;   // USB serial monitor
 constexpr uint8_t  BT_SERIAL_PORT = 3;      // Serial3 = pins 14/15 (confirmed)
 constexpr uint32_t BT_BAUD        = 115200; // confirmed
 
+// ---------- MegaPi sensor ports (RJ25 sockets 5-8 on the "MegaPi Shield for RJ25") ----------
+// Fixed board wiring, from Makeblock's MeMegaPi.cpp (mePort table): each port has two signal pins.
+// Port 5 = 16/17 (also Serial2), 6 = A8/A9, 7 = A10/A11, 8 = A13/A12. Arduino Mega: A0 = 54.
+constexpr uint8_t MEGAPI_PORT_PIN1[9] = {0, 0, 0, 0, 0, 16, 62, 64, 67};  // index = port number
+constexpr uint8_t MEGAPI_PORT_PIN2[9] = {0, 0, 0, 0, 0, 17, 63, 65, 66};
+
+// ---------- Side ultrasonic (Me Ultrasonic, one signal pin = the port's second pin) ----------
+// Desk test 4 (27 Nov 2026): port 6, signal on its second pin (63 = A9). Measured 10.2 cm at 10 cm
+// and 30.0 cm at 30 cm. Port 5 (the shield's serial port, via its 2x2 socket) gave no echo on either
+// pin: 15-23 us blips at 10 cm, pin 17 resting HIGH. Suspect the 2x2 corner of the shield.
+constexpr uint8_t  US_PORT          = 6;
+constexpr uint8_t  US_PIN           = MEGAPI_PORT_PIN2[US_PORT];
+constexpr uint16_t US_MAX_CM        = 60;    // farther echoes count as "no echo"
+constexpr uint32_t US_TIMEOUT_US    = US_MAX_CM * 58UL + 200UL;  // 3680 us: the longest a read may block
+constexpr uint16_t US_DESK_PERIOD_MS = 50;   // desk test 4: 20 readings a second
+constexpr uint8_t  US_STEP_SAMPLES  = 5;     // readings per ruler position in step mode (median kept)
+constexpr float    US_STEP_CM       = 1.0f;  // ruler step between positions in step mode
+
 // ---------- Link supervision ----------
 constexpr uint16_t HEARTBEAT_PERIOD_MS = 500;   // plan: HB twice a second
 constexpr uint16_t STOP_LATENCY_MAX_MS = 500;   // desk test 1: phone STOP must show up within this

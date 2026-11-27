@@ -40,6 +40,11 @@ Then combine the parts in this order:
 
 PC unit tests stay for the pure maths only (geometry, filters, strategy). They never block hardware work.
 
+## Git branches
+- Day-to-day work happens on `dev`. Commit and push there, including steps that are still in progress.
+- `main` only gets finished steps: merge `dev` into `main` when a step's "done when" is met, with the measured numbers in the commit message.
+- Raw monitor logs (`platformio-device-monitor-*.log`) are not committed. Keep the useful ones as `tests/results/<date>_<part>.csv`.
+
 ## Build and test
 - Robot build: `pio run -e megapi`. Upload: `pio run -e megapi -t upload`. Serial monitor: `pio device monitor -b 115200`.
 - PC unit tests: `pio test -e test` (Unity, native). Add `-v` to see the design report.
@@ -54,7 +59,9 @@ PC unit tests stay for the pure maths only (geometry, filters, strategy). They n
   - The gripper DC motor is on SLOT4.
 - Sensors:
   - `MeLineFollower`: 0 = black, 1 = white.
-  - Ultrasonic on the left side detects cubes; the measured width tells a cube from the opponent robot. Always call `distanceCm(60)` so the timeout stays around 3.5 ms.
+  - Ultrasonic on the left side detects cubes; the measured width tells a cube from the opponent robot. It is on port 6 of the RJ25 shield, signal on pin 63 (A9), confirmed in desk test 4. Port 5 gave no echo on either pin; suspect the shield's 2×2 corner, so don't use port 5 until that is checked.
+  - Do not use Makeblock's `distanceCm(60)`. In library 3.31 it ignores the 60 and waits for the whole echo pulse (tens of ms with nothing in range), and it returns the previous value if called again within 23 ms. Read the pin directly with `pulseIn(pin, HIGH, cfg::US_TIMEOUT_US)` (3.7 ms cap), as `src/hwtest/ultrasonic.cpp` does.
+  - Sensor ports 5–8 are on the "MegaPi Shield for RJ25", stacked on the MegaPi's left grey/red/yellow (GND/5V/SIG) pin rows. Port-to-pin table: `cfg::MEGAPI_PORT_PIN1/2`.
   - Colour sensor on the arm.
   - MPU-6050 accelerometer/gyro at 0x68, DLPF_CFG = 3 (44 Hz).
   - Camera shutter.
