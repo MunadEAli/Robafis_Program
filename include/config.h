@@ -42,6 +42,14 @@ constexpr uint16_t US_DESK_PERIOD_MS = 50;   // desk test 4: 20 readings a secon
 constexpr uint8_t  US_STEP_SAMPLES  = 5;     // readings per ruler position in step mode (median kept)
 constexpr float    US_STEP_CM       = 1.0f;  // ruler step between positions in step mode
 
+// ---------- SCAN: cube or robot by apparent width (desk test 4, tests/results/2026-11-27_ultrasonic.csv) ----------
+// Measured, sensor still: a 3 cm cube looks 7-9 cm wide at 8-14 cm; a 16 cm flat object looks ~23 cm wide
+// at 10 cm (the echo reaches ~3.5 cm past each end). Starting values, to re-check while driving (I2).
+constexpr float SCAN_CUBE_MAX_WIDTH_CM  = 12.0f;  // up to this: CUBE (measured max 9 + margin)
+constexpr float SCAN_ROBOT_MIN_WIDTH_CM = 16.0f;  // from this: ROBOT; in between: OBSTACLE, don't grab
+constexpr float SCAN_MIN_VALID_CM       = 3.0f;   // plan: shorter readings are not trusted
+// Edge readings come out up to ~5 cm too long, so an object's distance is its closest readings, not the mean.
+
 // ---------- Link supervision ----------
 constexpr uint16_t HEARTBEAT_PERIOD_MS = 500;   // plan: HB twice a second
 constexpr uint16_t STOP_LATENCY_MAX_MS = 500;   // desk test 1: phone STOP must show up within this

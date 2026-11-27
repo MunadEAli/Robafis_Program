@@ -61,6 +61,7 @@ PC unit tests stay for the pure maths only (geometry, filters, strategy). They n
   - `MeLineFollower`: 0 = black, 1 = white.
   - Ultrasonic on the left side detects cubes; the measured width tells a cube from the opponent robot. It is on port 6 of the RJ25 shield, signal on pin 63 (A9), confirmed in desk test 4. Port 5 gave no echo on either pin; suspect the shield's 2×2 corner, so don't use port 5 until that is checked.
   - Do not use Makeblock's `distanceCm(60)`. In library 3.31 it ignores the 60 and waits for the whole echo pulse (tens of ms with nothing in range), and it returns the previous value if called again within 23 ms. Read the pin directly with `pulseIn(pin, HIGH, cfg::US_TIMEOUT_US)` (3.7 ms cap), as `src/hwtest/ultrasonic.cpp` does.
+  - Desk test 4 (`tests/results/2026-11-27_ultrasonic.csv`): a 3 cm cube looks 7–9 cm wide at 8–14 cm, and a 16 cm flat object looks ~23 cm wide at 10 cm. Readings at an object's edges come out up to ~5 cm too long, and single stray far echoes (an arm, the room) happen. Thresholds are in `cfg::SCAN_*`.
   - Sensor ports 5–8 are on the "MegaPi Shield for RJ25", stacked on the MegaPi's left grey/red/yellow (GND/5V/SIG) pin rows. Port-to-pin table: `cfg::MEGAPI_PORT_PIN1/2`.
   - Colour sensor on the arm.
   - MPU-6050 accelerometer/gyro at 0x68, DLPF_CFG = 3 (44 Hz).
